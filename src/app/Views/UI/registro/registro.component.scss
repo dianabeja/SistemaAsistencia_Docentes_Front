@@ -7,28 +7,50 @@
 }
 
 body {
-  background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
+  background-image: linear-gradient(-225deg, #fde3e3 0%, #ffe6fa 100%);
   background-image: linear-gradient(to top, rgb(168, 237, 234) 0%, #fed6e3 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
 
-  font-family: "Vibur", cursive;
-  font-family: "Abel", sans-serif;
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   opacity: 0.95;
 }
 
+table{
+  width: 100vw;
+  height: 100vh;
+}
+
+tr{
+  width: auto;
+}
+
+img{
+  display: block;
+  float: right;
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+  margin-top: 20px;
+}
+
+div{
+  position: relative;
+}
+
 form {
+  float: right;
+  background-color: white;
   width: 450px;
-  min-height: 500px;
-  height: auto;
-  border-radius: 5px;
-  margin: 0% auto;
+  height: 100%;
   box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
   padding: 7%;
-  background-image: linear-gradient(-225deg, #e3fdf5 50%, #ffe6fa 50%);
 }
 
 form .con {
+  width: auto;
+
   display: -webkit-flex;
   display: flex;
 
@@ -38,22 +60,28 @@ form .con {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 
-  margin: 0 auto;
+  margin: 0px;
+  
 }
 
 header {
   margin: 2% auto 10% auto;
   text-align: center;
-}
-
-header h2 {
-  font-size: 250%;
-  font-family: "Playfair Display", serif;
-  color: #3e403f;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 header p {
   letter-spacing: 0.05em;
+}
+
+header.head-button h2{
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: bold;
+    float: left;
 }
 
 .input-item {
@@ -82,20 +110,26 @@ header p {
 }
 
 input[class="form-input"] {
+  display:inline-block;
+
   width: 240px;
   height: 50px;
-
-  margin-top: 2%;
+  margin-left: 5%;
+  margin-right: auto;
+  margin-top: 3%;
   padding: 15px;
 
   font-size: 16px;
-  font-family: "Abel", sans-serif;
+  font-family: 'Poppins', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
   color: #5e6472;
+
+  background-color: rgb(236, 236, 236);
 
   outline: none;
   border: none;
 
-  border-radius: 0px 5px 5px 0px;
+  border-radius: 50px;
   transition: 0.2s linear;
 }
 input[id="txt-input"] {
@@ -116,7 +150,7 @@ button {
 
   padding: 0 20px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 50px;
 
   outline: none;
   border: none;
@@ -127,6 +161,10 @@ button {
 
   margin: 7% auto;
   letter-spacing: 0.05em;
+
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+  color: white;
 }
 
 .submits {
@@ -163,12 +201,19 @@ button:hover {
   }
 }
 
+.btn_submits_sign-up{
+  background-color: #1977f1;
+  width: auto;
+  box-shadow: 30px, 30px, 5px, black;
+  z-index: 2;
+}
+
 .MensajeMostrar {
   position: fixed;
   top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #ff3300;
+  background-color: #0575E6;
   color: #fff;
   padding: 10px;
   border-radius: 5px;
@@ -209,5 +254,18 @@ form {
   height: auto;
   max-height: 300px;
   margin-top: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
+.log-in{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgb(10, 192, 10);
+  width: auto;
+}
+
+.other{
+  margin-left: 20%;
+}

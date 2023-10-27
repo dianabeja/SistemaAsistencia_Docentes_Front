@@ -27,6 +27,7 @@ export class DocenteComponent implements OnInit {
     this.response$ = await this._getDocentesCasosUso.getDocenteByID(this.token);
     this.response$.subscribe((data: any) => {
       this.datos = data;
+      console.log(data)
     });
   }
 

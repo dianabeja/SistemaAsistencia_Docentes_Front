@@ -1,7 +1,7 @@
 <div class="overlay" style="padding-top: 1rem;">
   <table>
     <tr>
-      <td>
+      <td class="registro">
         <div class="other">
           <header class="head-button">
             <h2>¿Ya estás registrado?</h2>
@@ -18,12 +18,12 @@
             <header class="head-form">
               <h2>Registrar docente</h2>
             </header>
-      
             <div class="field-set">
               <span class="input-item">
                 <i class="fa fa-user-circle"></i>
               </span>
-              <input class="form-input" id="correo" type="email" placeholder="@Correo" [value]="correo_usuario" (input)="actualizarCorreo($event)" required />
+                <input class="form-input" id="correo" type="email" placeholder="@Correo" [value]="correo_usuario" 
+                (input)="actualizarCorreo($event)" required />
               <br />
       
               <span class="input-item">

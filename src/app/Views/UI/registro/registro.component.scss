@@ -22,8 +22,8 @@ table{
   height: 100vh;
 }
 
-tr{
-  width: auto;
+tr.registro{
+  width: 60%;
 }
 
 img{
@@ -31,8 +31,8 @@ img{
   float: right;
   width: 150px;
   height: 150px;
-  margin: 10px;
   margin-top: 20px;
+  margin-right: 10px;
 }
 
 div{
@@ -46,10 +46,12 @@ form {
   height: 100%;
   box-shadow: 0 9px 50px hsla(20, 67%, 75%, 0.31);
   padding: 7%;
+  padding-top: 0;
 }
 
 form .con {
   width: auto;
+  position: relative;
 
   display: -webkit-flex;
   display: flex;
@@ -77,11 +79,13 @@ header p {
 }
 
 header.head-button h2{
+    margin: 2% auto 0% auto;
     color: #ffffff;
     font-family: 'Poppins', sans-serif;
     font-family: 'Ubuntu', sans-serif;
     font-weight: bold;
     float: left;
+    text-align: left;
 }
 
 .input-item {
@@ -121,7 +125,7 @@ input[class="form-input"] {
 
   font-size: 16px;
   font-family: 'Poppins', sans-serif;
-    font-family: 'Ubuntu', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   color: #5e6472;
 
   background-color: rgb(236, 236, 236);
@@ -132,9 +136,11 @@ input[class="form-input"] {
   border-radius: 50px;
   transition: 0.2s linear;
 }
+
 input[id="txt-input"] {
   width: 250px;
 }
+
 /* focus  */
 input:focus {
   transform: translateX(-2px);
@@ -169,7 +175,7 @@ button {
 
 .submits {
   width: 48%;
-  display: inline-block;
+  display: block;
   float: left;
   margin-left: 2%;
 }
@@ -187,11 +193,10 @@ button {
 button:hover {
   transform: translatey(3px);
   box-shadow: none;
-}
-
-button:hover {
   animation: ani9 0.4s ease-in-out infinite alternate;
 }
+
+
 @keyframes ani9 {
   0% {
     transform: translateY(3px);
@@ -236,13 +241,8 @@ button:hover {
   to { opacity: 0; }
 }
 
-
 .overlay {
   padding-top: 1rem;
-}
-
-form {
-  padding-top: 0;
 }
 
 .form-group {

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FirestoreService } from '../servicios/FirestoreListas.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Location } from '@angular/common';
-import { PostCuentasUseCase } from 'src/app/domain/Formularios/client/getFormulario';
+import { PostCuentasUseCase } from '../../../domain/Formularios/client/getFormulario';
 
 @Component({
   selector: 'app-registro',

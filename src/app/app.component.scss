@@ -10,7 +10,7 @@
 
  #ContenedorLogin {
   height: 200rem;
-  color: antiquewhite;
+  background-color: violet;
   background-attachment: fixed;
  }
 }
@@ -41,9 +41,9 @@ body {
 }
 
 #ContenedorLogin {
-  position: relative;
-  width: 100%;
-  min-height: 100%;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 #Navegacion {
@@ -79,7 +79,15 @@ body {
 }
 
 #Registro {
+  background: linear-gradient(to top, #011970, #44a0fe);
   min-width: 100%;
   min-height: 100%;
+  z-index: 2;
 }
 
+#Login {
+  background: linear-gradient(to top, #011970, #44a0fe);
+  min-width: 100%;
+  min-height: 100%;
+  z-index: 2;
+}

@@ -16,8 +16,8 @@ export class GetMateriaUseCase {
     return this._materiasGateWay.getMateriasAll(nrc);
   }
 
-  getNRCMaterias (numero_personal: string) : Observable <NRC> {
-    return this._materiasGateWay.getNRCMaterias(numero_personal);
+  getNRCMaterias (no_personal: string) : Observable <NRC> {
+    return this._materiasGateWay.getNRCMaterias(no_personal);
   }
 }
 

@@ -13,10 +13,10 @@ export class MateriasAdapter implements MateriasPort {
   api = environment.apiDocente;
   constructor(private http: HttpClient, private firestore: AngularFirestore) { }
 
-  getNRCMaterias(numero_personal: string): Observable<NRC> {
+  getNRCMaterias(no_personal: string): Observable<NRC> {
     let header = new HttpHeaders({
       'Content-Type': 'application/json',
-      Authorization: numero_personal,
+      Authorization: no_personal,
     });
     return this.http.get<NRC>(this.api + 'VerMateriaDocente/', { headers: header });
   }

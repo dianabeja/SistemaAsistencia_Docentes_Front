@@ -37,6 +37,7 @@ export class InicioComponent implements OnInit {
     console.log(this.Token);
     //Obtener NRC del docente mandando su token
     await this.obtener_nrcMaterias(this.Token);
+    console.log("Resultado de obtener_nrcMaterias:", this.nrc$);
     //Generar nuevo token con el array de NRC
     await this.generarToken(this.nrc$.nrcs);
     //
@@ -67,11 +68,13 @@ export class InicioComponent implements OnInit {
     let nrc: string[] | any = await this.Materias.map(
       (materia: any) => materia.nrc
     );
+    console.log("materiaas "+this.Materias)
     //obtener la licenciatura de la materia de cada objeto del array a través de su campo materia.licenciatura con ayuda de la funcion map
     let carrera: string[] | any = await this.Materias.map(
       (materia: any) => materia.licenciatura
+      
     );
-
+    console.log(nrc)
     //se itera las mismas veces que el tamaño del arreglo de nrc/carrera
     for (let a = 0; a <= nrc.length - 1; a++) {
       //guardar en una nueva variable de tipo array la cantidad de alumnos obtenida de su consulta con el metodo establecido
@@ -92,7 +95,6 @@ export class InicioComponent implements OnInit {
     this.nrc$ = await new Promise((resolve, reject) => {
       this._getMateriasCasosUso.getNRCMaterias(Token).subscribe(
         (Resp: any) => {
-          console.log(Resp);
           //Devuelve un arreglo de NRC
           resolve(Resp);
         },

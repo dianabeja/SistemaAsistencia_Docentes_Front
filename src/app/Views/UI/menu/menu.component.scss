@@ -5,6 +5,9 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   background:fixed;
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: bold;
 }
 
 .Navegador {
@@ -12,11 +15,9 @@
   min-width: 100%;
   min-height: 100%;
   max-width: 30px;
-  max-height: 30px;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-
-  background-color: #2087a3;
+  background: linear-gradient(to bottom, #011970, #44a0fe);
   margin: 0;
   padding: 0;
 
@@ -76,27 +77,17 @@
 .Logo_Pagina_img img {
   width: 70%;
   height: 70%;
-  padding: 0 20px;
+  padding: 30px 40px;
 }
 
 .Nombre_Pagina_Text_Defualt {
-  background: linear-gradient(to left,
-      rgba(248, 249, 250, 1), rgba(233, 236, 239, 1), rgba(222, 226, 230), rgba(206, 212, 218, 1),
-      rgba(206, 212, 218, 1), rgba(206, 212, 218, 1),rgba(173, 181, 189, 1),
-    );
+  background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 30px;
-}
-
-.Nombre_Pagina_Text {
-  background: linear-gradient(to left,
-      rgba(52, 58, 64, 1),
-      rgba(33, 37, 41, 1), rgba(33, 37, 41, 1), rgba(33, 37, 41, 1));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-size: 30px;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: bolder;
+  font-family: 'Poppins', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
 }
 
 .Rutas_Navegacion_Listado {
@@ -108,11 +99,7 @@
 }
 
 .Rutas_Navegacion_Listado a {
-  background: linear-gradient(to left,
-      rgb(255, 255, 255), rgb(254, 254, 255), rgb(251, 253, 255),rgba(248, 249, 250, 1),
-      rgba(233, 236, 239, 1), rgba(222, 226, 230), rgba(206, 212, 218, 1),rgba(206, 212, 218, 1),
-      rgba(206, 212, 218, 1),rgba(173, 181, 189, 1),
-    );
+  background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 500;
@@ -124,21 +111,17 @@
 }
 
 .Cerrar_Sesion {
-
+  padding: 0;
+  margin: 0;
 }
 
 .Cerrar_Sesion button {
   border-color: inherit;
   background-color: inherit;
   border: none;
-}
-
-.Cerrar_Sesion button p{
   font-size: 16px;
   color: white;
   font-weight: 700;
-  padding: 0;
-  margin: 0;
 }
 
 .Cerrar_Sesion_img {

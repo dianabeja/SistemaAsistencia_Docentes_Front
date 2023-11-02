@@ -64,7 +64,7 @@
   </div>
 
   <div *ngIf="Mostrar_Mensaje_Cuenta" class="MensajeMandar" >
-    <p>{{ Mensaje_Cuenta }}</p>
-    <button *ngIf="mostrarBotonAceptar" (click)="ocultarMensajeCuenta()">Aceptar</button>
+    <p class="error">{{ Mensaje_Cuenta }}</p>
+    <button class="error" *ngIf="mostrarBotonAceptar" (click)="ocultarMensajeCuenta()">Aceptar</button>
   </div>
 </div>

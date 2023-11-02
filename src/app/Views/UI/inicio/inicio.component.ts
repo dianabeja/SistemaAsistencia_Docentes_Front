@@ -37,7 +37,6 @@ export class InicioComponent implements OnInit {
     console.log(this.Token);
     //Obtener NRC del docente mandando su token
     await this.obtener_nrcMaterias(this.Token);
-    console.log("Resultado de obtener_nrcMaterias:", this.nrc$);
     //Generar nuevo token con el array de NRC
     await this.generarToken(this.nrc$.nrcs);
     //
@@ -96,6 +95,7 @@ export class InicioComponent implements OnInit {
       this._getMateriasCasosUso.getNRCMaterias(Token).subscribe(
         (Resp: any) => {
           //Devuelve un arreglo de NRC
+          
           resolve(Resp);
         },
         (error: any) => {
@@ -103,6 +103,7 @@ export class InicioComponent implements OnInit {
         }
       );
     });
+    console.log('Obtener materaaaas:'+this.nrc$)
   }
 
   //Este metodo recibirá un token cuyo valor será el array de NRC y devolverá la informacion necesaria de cada nrc

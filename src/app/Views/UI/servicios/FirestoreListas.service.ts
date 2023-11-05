@@ -62,6 +62,13 @@ export class FirestoreService {
     this.formularioSubject.next(formulario);
   }
 
+  //Funcion para almacenar un arreglo de valores con un único indice
+  guardar_ArregloLocal(indice: string, valor: any): void {
+    const arreglo_Local = JSON.parse(this.obtener_DatoLocal(indice)) || [];
+    arreglo_Local.push(valor);
+    this.guardar_DatoLocal(indice, JSON.stringify(arreglo_Local));
+  }
+
 
   //eliminar caché en el navegador
   eliminarCacheNavegador() {

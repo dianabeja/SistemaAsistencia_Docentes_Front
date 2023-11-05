@@ -5,12 +5,14 @@ import { GetListaAsistenciaUseCase } from 'src/app/domain/ListaAsistencia/usecas
 import * as XLSX from 'xlsx';
 import firebase from 'firebase/compat/app';
 import 'firebase/firestore';
+import { ListasAsistenciaPostgres } from '../servicios/firebase.service';
 
 @Component({
   selector: 'app-listas',
   templateUrl: './listas.component.html',
   styleUrls: ['./listas.component.scss'],
 })
+
 export class Listas implements OnInit {
   listaAsistencia: any[] | any = [];
   nrcMateria: any;
@@ -25,19 +27,37 @@ export class Listas implements OnInit {
   constructor(
     private _getListaAsistenciaCasosUso: GetListaAsistenciaUseCase,
     private servicedatos: DatosService,
-    private http: HttpClient
+    private http: HttpClient,
+    private servicio: ListasAsistenciaPostgres,
   ) {
     this.carrera = servicedatos.getCarrera();
     this.nrcMateria = servicedatos.getNrc();
   }
 
   async ngOnInit() {
-    this.listaAsistencia =
-      await this._getListaAsistenciaCasosUso.getListaAsistenciaByNrcCarrera(
-        this.nrcMateria,
-        this.carrera
-      );
+    //this.listaAsistencia =
+    //  await this._getListaAsistenciaCasosUso.getListaAsistenciaByNrcCarrera(
+    //    this.nrcMateria,
+    //    this.carrera
+    //  );
+      
+      this.servicio.obtener_MateriasDocentes()
+      console.log('este nrc',this.nrcMateria)
+      let materiaSalon= this.servicio.getMateriaSalon(this.nrcMateria)
+      console.log('materia salon: ',materiaSalon)
+      this.servicio.getMateriaSalon(this.nrcMateria).subscribe(
+        data => {
+          // Aquí puedes manejar la información recibida, por ejemplo, imprimirla en la consola
+          console.log('Datos de MateriaSalon:', data);
+        },
+        error => {
+          // Maneja los errores si es necesario
+          console.error('Error al obtener datos de MateriaSalon:', error);
+        }
+        );
+
   }
+  
 
   Archivo(event: any) {
     const file = event.target.files[0];

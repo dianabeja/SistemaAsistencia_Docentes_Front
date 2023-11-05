@@ -165,7 +165,9 @@ export class RegistroComponent implements OnInit {
     this.datosLocales.Actualizar_Formulario('login');
     this.datosLocales.guardar_DatoLocal('formulario', 'login');
     this.location.go('/Sistema/Login');
-    //Recargar página de destino
+    //Recargar página de destino+
+
+    
     location.reload();
   }
 

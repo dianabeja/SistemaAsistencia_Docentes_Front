@@ -1,6 +1,8 @@
 import { GetEscanerDatosUseCase } from './../../../domain/EscanerDatos/usecase/getEscanerDatos';
 import { Component, Inject, OnInit } from '@angular/core';
 import { DatosService } from '../inicio/Datos.Service';
+import { ListasAsistenciaPostgres } from '../servicios/firebase.service';
+
 
 export interface Estructura {
   Matricula: string;
@@ -21,14 +23,18 @@ export class ListadoComponent implements OnInit {
   carrera: string = '';
   datosCargados: boolean = false;
   fechaCompleta: string;
+  Dia!: String;
+  Hora!: String;
 
   constructor(
     private _getDatos: GetEscanerDatosUseCase,
-    private datos: DatosService
+    private datos: DatosService,
+    private servicio: ListasAsistenciaPostgres,
+
   ) {
     this.carrera = datos.getCarrera();
-    this.nrcMateria = datos.getNrc();
-
+   // this.nrcMateria = datos.getNrc();
+    
     let fecha = new Date();
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
@@ -37,11 +43,6 @@ export class ListadoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    (await this._getDatos.getEscanerDatos(this.nrcMateria, this.fechaCompleta)).subscribe((datos) => {
-      this.listaAsistencia = datos;
-    }, (error) => {
-      console.error('Error al obtener los datos:', error);
-    });
-
+    this.listaAsistencia= await this.servicio.ListaTiempoReal();
   }
 }

@@ -23,7 +23,10 @@ export class Listas implements OnInit {
   vistaPreviaArchivo: boolean | any;
   mensajeSubir: boolean | any;
   Guardar_Datos: any[] = [];
-
+  Dia!: String;
+  Hora!: String;
+  public mostrarTarjeta: boolean = false; // Propiedad para controlar la visibilidad de la tarjeta
+  public alumnoSeleccionado: any; 
   constructor(
     private _getListaAsistenciaCasosUso: GetListaAsistenciaUseCase,
     private servicedatos: DatosService,
@@ -35,27 +38,18 @@ export class Listas implements OnInit {
   }
 
   async ngOnInit() {
-    //this.listaAsistencia =
-    //  await this._getListaAsistenciaCasosUso.getListaAsistenciaByNrcCarrera(
-    //    this.nrcMateria,
-    //    this.carrera
-    //  );
-      
-      this.servicio.obtener_MateriasDocentes()
-      console.log('este nrc',this.nrcMateria)
-      let materiaSalon= this.servicio.getMateriaSalon(this.nrcMateria)
-      console.log('materia salon: ',materiaSalon)
-      this.servicio.getMateriaSalon(this.nrcMateria).subscribe(
-        data => {
-          // Aquí puedes manejar la información recibida, por ejemplo, imprimirla en la consola
-          console.log('Datos de MateriaSalon:', data);
-        },
-        error => {
-          // Maneja los errores si es necesario
-          console.error('Error al obtener datos de MateriaSalon:', error);
-        }
-        );
+    this.listaAsistencia =
+    await this.servicio.consultarListaAsistencia(
+      this.nrcMateria,
+      //"16234",
+      this.carrera
+    );
+  console.log('lista de asistencia', this.listaAsistencia);
 
+  }
+
+  Imprimir () {
+    this.servicio.ExportarExcel(this.nrcMateria);
   }
   
 
@@ -112,30 +106,65 @@ export class Listas implements OnInit {
     const db = firebase.firestore();
 
     let array: any = [
-      ["S20021111", "RODRIGUEZ MARTINEZ ANA", "2da", "ISOF"],
+      ["S20006732", "Yahir Jesus Jacome Cogco", "2da", "ISW"],
+     ["S20006730", "Carlos Arturo Jose Fragoso", "2da", "ISW"],
+  ["S20006728", "Erick Juarez Espinosa", "2da", "ISW"],
+  ["S20006748", "Rodrigo Mencias Gonzalez", "2da", "ISW"],
+  ["S20006761", "Itzel Mendez Martinez", "2da", "ISW"],
+  ["S19004877", "Jesus Saith Meneses Conde", "2da", "ISW"],
+  ["S20006742", "Axel Gustavo Peña Sanchez", "2da", "ISW"],
+  ["S20006770", "Adriel Eduardo Peregrina Soto", "2da", "ISW"],
     ]
-    
-    for (let i = 0; i <  array.length; i++) {
+
+    for (let i = 0; i < array.length; i++) {
       const datos_lista: any = {
-        Matricula:  array[i][0],
-        Nombre:  array[i][1],
-        Status:  array[i][2],
-        Carrera:  array[i][3],
+        Matricula: array[i][0],
+        Nombre: array[i][1],
+        Status: array[i][2],
+        Carrera: array[i][3],
       };
 
-      const coleccion = db.collection(`ISW/Materias/12345/` + datos_lista.Matricula + '/Asistencia' );
+      // Crear una ruta dinámica que incluye la matrícula
+      const rutaDocumento = db.collection(
+        `ISW/Materias/98125`
+      );
 
-      const docRef = coleccion.doc(datos_lista.Matricula);
-      docRef
-        .set(datos_lista)
+      // Darle un id al documento de lista de asistencia con el nombre de la matrícula
+      const docRef = rutaDocumento.doc(datos_lista.Matricula);
+
+      // Inicializar un lote de escritura para realizar múltiples operaciones en una transacción.
+      const batch = db.batch();
+
+      // Realizar una operación en el documento principal
+      batch.set(docRef, {
+        Matricula: datos_lista.Matricula,
+        Nombre: datos_lista.Nombre,
+        Status: datos_lista.Status,
+        Carrera: datos_lista.Carrera,
+      });
+
+      // Realizar una operación en la subcolección "Asistencia" para crearla si no existe
+      const docRefAsistencia = docRef.collection('Asistencia').doc(' ');
+      batch.set(docRefAsistencia, { });
+
+      // Realizar una operación en la subcolección "Inasistencia" para crearla si no existe
+      const docRefInasistencia = docRef.collection('Inasistencia').doc(' ');
+      batch.set(docRefInasistencia, { });
+
+      // Realizar todas las operaciones en el lote de escritura
+      batch.commit()
         .then(() => {
-          console.log('Datos guardados correctamente');
+          console.log('Datos de lista de asistencia y subcolecciones creadas con éxito.');
         })
         .catch((error) => {
-          console.error('Error al guardar los datos:', error);
+          console.error('Error al guardar los datos de lista de asistencia:', error);
         });
-    }
+     }
   }
 
+  ElegirAlumno() {
+    console.log("alumno elegido")
+  }
 
+  
 }

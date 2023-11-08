@@ -4,29 +4,29 @@ import { FirestoreService } from './FirestoreListas.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
+import * as XLSX from 'xlsx';
 
-
+import { GetListaAsistenciaUseCase } from 'src/app/domain/ListaAsistencia/usecase/getLista';
 
 //IMPORTAR EL METODO DE LA API PARA LLAMAR LA INFORMACION DE LA TABLA MATERIA_SALON
 //Guardar la info en una variable
-//Hacer un metodo para filtrar qué nrc de la peticion coincide con los nrc del docente 
+//Hacer un metodo para filtrar qué nrc de la peticion coincide con los nrc del docente
 @Injectable({
   providedIn: 'root',
 })
 export class ListasAsistenciaPostgres {
-
   Edificio: string | any;
   Salon: string | any;
   Dia: string | any;
   Hora: string | any;
-  api = environment.apiDocente + 'MateriaSalon';
+  api = environment.apiDocente + 'MateriaHorario';
 
   constructor(
     private firestore: AngularFirestore,
     private cache: FirestoreService,
-    private http: HttpClient
+    private http: HttpClient,
+    private _getListaAsistenciaCasosUso: GetListaAsistenciaUseCase
   ) {
-
     /* let fecha = new Date();
 
     let diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
@@ -41,25 +41,268 @@ export class ListasAsistenciaPostgres {
 
     let horaCompleta = horaInicio + '-' + hora_fin; */
 
-    this.Dia = 'lunes';
-    this.Hora = '11:00-13:00';
+    this.Dia = 'Lunes';
+    this.Hora = '09:00-11:00';
   }
 
-  obtener_MateriasDocentes () {
+  async Obtener_Materia_EnCurso() {
+    let materiasDocente: any = this.cache.obtener_DatoLocal(
+      'MateriasDocenteArray'
+    );
 
-    let materiasDocente: any = this.cache.obtener_DatoLocal("MateriasDocenteArray");
-//Los nrc del docente están guardados en materiasDocente.
-    let docente: any = this.cache.obtener_DatoLocal("docenteInfo");
+    // Convertir el string a un arreglo, para poder filtrar los nrc que tienen la siguiente estructura
+    materiasDocente = materiasDocente.split(',');
 
-    console.log(materiasDocente)
+    // Quitar los corchetes del inicio y del final [ ]
+    materiasDocente[0] = materiasDocente[0].replace('[[', '');
+    materiasDocente[materiasDocente.length - 1] = materiasDocente[
+      materiasDocente.length - 1
+    ].replace(']]', '');
+
+    // Convertir el arreglo a un arreglo de números
+    materiasDocente = materiasDocente.map((nrc: any) => parseInt(nrc));
+
+    // Obtener las materias dependiendo del docente
+    let materias: any = await this.getMateriaSalon().toPromise();
+
+    // Filtrar las materias que coinciden con los nrc del docente
+    const materiasDelDocente = materias.filter((materia: any) =>
+      materiasDocente.includes(materia.nrc)
+    );
+
+    return materiasDelDocente;
   }
 
-    getMateriaSalon(Token: string): Observable<any> {
-      let header = new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': Token
-    });
-      return this.http.get<any>(this.api, { headers: header });
+  async Obtener_Lista_Asistencia_Firebase(nrc: string, carrera: string) {
+    let lista_asistencia_cache =
+      this.cache.obtener_DatoLocal('ListaAsistencia');
+
+    if (lista_asistencia_cache == null) {
+      console.log('No hay cache');
+
+      let lista_asistencia_final: any = await this.consultarListaAsistencia(
+        nrc,
+        carrera
+      );
+
+      console.log(lista_asistencia_final, 'lista_asistencia_final');
+
+      this.cache.guardar_ArregloLocal2(
+        'ListaAsistencia',
+        lista_asistencia_final
+      );
+      this.cache.guardar_DatoLocal('NRCListaAsistencia', nrc);
+
+      return lista_asistencia_final;
+    } else if (nrc != this.cache.obtener_DatoLocal('NRCListaAsistencia')) {
+      this.cache.eliminar_DatoLocal('ListaAsistencia');
+      this.cache.eliminar_DatoLocal('NRCListaAsistencia');
+
+      let lista_asistencia_final: any = await this.consultarListaAsistencia(
+        nrc,
+        carrera
+      );
+
+      this.cache.guardar_ArregloLocal2(
+        'ListaAsistencia',
+        lista_asistencia_final
+      );
+      this.cache.guardar_DatoLocal('NRCListaAsistencia', nrc);
+
+      return lista_asistencia_final;
+    } else if (nrc == this.cache.obtener_DatoLocal('NRCListaAsistencia')) {
+      console.log('Si coincide el nrc');
+
+      const lista_asistencia_final = JSON.parse(lista_asistencia_cache);
+
+      return lista_asistencia_final;
     }
+  }
+
+  async consultarListaAsistencia(nrc: string, carrera: string) {
+
+    let Materia = await this.Obtener_Materia_EnCurso();
+
+    console.log(Materia, 'Materia');
+
+    let lista_asistencia: any =
+      await this._getListaAsistenciaCasosUso.getListaAsistenciaByNrcCarrera(
+        nrc,
+        carrera
+      );
+
+    let Mapear_Asistencias_Inasistencias = lista_asistencia.map(
+      async (alumno: any) => {
+        let asistencias: any = await this.firestore
+          .collection(
+            `/ISW/Materias/${nrc}/` + alumno.Matricula + `/Asistencia`
+          )
+          .get()
+          .toPromise();
+        let inasistencias: any = await this.firestore
+          .collection(
+            `/ISW/Materias/${nrc}/` + alumno.Matricula + `/Inasistencia`
+          )
+          .get()
+          .toPromise();
+
+        let asistenciadata = asistencias.docs.map((asistencia: any) => {
+          return asistencia.data();
+        });
+
+        let inasistenciaData = inasistencias.docs.map((inasistencia: any) => {
+          return inasistencia.data();
+        });
+
+        alumno.asistencias = asistenciadata;
+        alumno.inasistencias = inasistenciaData;
+
+        alumno.cantidad_asistencias = asistenciadata.length;
+        alumno.cantidad_inasistencias = inasistenciaData.length;
+
+        let derecho = this.Calcular_Derechos_Acumulados(Materia[0].horasemana,  inasistenciaData.length);
+
+        console.log(derecho, 'derecho');
+
+        alumno.derecho = derecho;
+
+        //let informacion_alumno: any = await this.getAlumno(
+        //  alumno.Matricula
+        //).toPromise();
+//
+        //alumno.imagen = informacion_alumno[0].url_imagen;
+
+        return alumno;
+      }
+    );
+
+    let lista_asistencia_final = await Promise.all(
+      Mapear_Asistencias_Inasistencias
+    );
+
+    return lista_asistencia_final;
+  }
+
+  getMateriaSalon(): Observable<any> {
+    let header = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    //Pasar en el body el dia y la hora
+    return this.http.post<any>(
+      this.api,
+      { horario: this.Hora, dia: this.Dia },
+      { headers: header }
+    );
+  }
+
+  getAlumno(matricula: any): Observable<any> {
+    let header = new HttpHeaders({
+      'Content-Type': 'application/json',
+      matricula: matricula,
+    });
+    return this.http.get<any>(environment.apiDocente + 'ObtenerAlumno', {
+      headers: header,
+    });
+  }
+
+  async ListaTiempoReal() {
+    const Materia: any = await this.Obtener_Materia_EnCurso();
+
+    const Lista_Asistencia: any = await this.consultarListaAsistencia(
+      Materia[0].nrc,
+      Materia[0].licenciatura
+    );
+
+    console.log(Lista_Asistencia, 'Lista_Asistencia');
+
+    const nuevosDocumentosArray: any = [];
+
+    const promesas = Lista_Asistencia.map(async (alumno: any) => {
+      return new Promise((resolve, reject) => {
+        const asistenciasRef = this.firestore.collection(
+          `/ISW/Materias/${Materia[0].nrc}/${alumno.Matricula}/Asistencia`
+        );
+        const subscription = asistenciasRef
+          .snapshotChanges()
+          .subscribe((asistenciasSnapshot: any) => {
+            asistenciasSnapshot.forEach((asistenciaChange: any) => {
+              const docId = asistenciaChange.payload.doc.id;
+              if (asistenciaChange.type === 'added' && docId === '07-11-23') {
+                const nuevoDocumento = asistenciaChange.payload.doc.data();
+                subscription.unsubscribe();
+                nuevoDocumento.url_imagen = alumno.imagen;
+                nuevosDocumentosArray.push(nuevoDocumento);
+
+                resolve(nuevoDocumento);
+              }
+            });
+          });
+      });
+    });
+
+    return nuevosDocumentosArray;
+  }
+
+  //Metodo para almacenar la asistencia de los alumnos en un archivo de excel o pdf
+async ExportarExcel(nrc: string) {
+     let data: any = await this.consultarListaAsistencia(nrc, 'ISW');
+     let newData: any;
+     newData = data.map((alumno: any) => {
+      return {
+        Matricula: alumno.Matricula,
+        Nombre: alumno.Nombre,
+        Status: alumno.Status,
+        Cantidad_Asistencias: alumno.cantidad_asistencias,
+        Cantidad_Inasistencias: alumno.cantidad_inasistencias,
+        Derecho: alumno.derecho,
+      };
+    });
+   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newData);    
+
+    // Establecer el ancho de las columnas
+    ws['!cols'] = [{ wch: 15 }, { wch: 35 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 12 }];
   
+
+
+
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, `${nrc}.xlsx`);
+  }
+  
+
+  Calcular_Derechos_Acumulados(horas_materias: any, inasistencias_alumno: any) {
+    let semanas_semestre = 16;
+
+    let asistencias_totales = (horas_materias * semanas_semestre) / 2;
+
+    let inasistencias_para_excentar = asistencias_totales * 0;
+
+    let inasistencias_para_ordinario = asistencias_totales * 0.2;
+
+    let inasistencias_para_extraordinario = asistencias_totales * 0.3;
+
+    let inasistencias_para_titulo = asistencias_totales * 0.4;
+
+    let inasistencias_alumno_totales = inasistencias_alumno;
+
+    let porcentaje_final =
+      (inasistencias_alumno_totales * 100) / asistencias_totales;
+
+    let derecho: string = ' ';
+
+    if (porcentaje_final <= 4) {
+      derecho = 'Excentar';
+    } else if (porcentaje_final > 4 && porcentaje_final <= 20) {
+      derecho = 'Ordinario';
+    } else if (porcentaje_final > 20 && porcentaje_final <= 30) {
+      derecho = 'Extraordinario';
+    } else if (porcentaje_final > 30 && porcentaje_final <= 40) {
+      derecho = 'Titulo';
+    } else if (porcentaje_final > 40) {
+      derecho = 'Reprobado';
+    }
+
+    return derecho;
+  }
 }

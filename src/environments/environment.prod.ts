@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   apiUrl:'https://my-json-server.typicode.com/IrvingCM123/Consumir_Apis',
-  apiDocente: 'https://api-service-irvingcm123.cloud.okteto.net/Servidor/',
+  apiDocente: 'https://docentesapi-service-irving-dianabeja.cloud.okteto.net/Servidor/',
   firebase: {
     apiKey: "AIzaSyDFtWhGBepZEtfyg92spnJmMubgtzKI6hA",
     authDomain: "siae-dd32c.firebaseapp.com",

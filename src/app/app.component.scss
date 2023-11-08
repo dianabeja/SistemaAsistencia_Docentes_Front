@@ -10,15 +10,12 @@
 
  #ContenedorLogin {
   height: 200rem;
-  background-color: violet;
   background-attachment: fixed;
  }
 }
 
 
 body {
-  background-image: linear-gradient(-225deg, #e3fdf5 0%, #ffe6fa 100%);
-  background-image: linear-gradient(to top, rgb(168, 237, 234) 0%, #fed6e3 100%);
   background-attachment: fixed;
   background-repeat: no-repeat;
 
@@ -51,7 +48,7 @@ body {
   grid-column-start: 1;
   grid-column-end: 7;
   background-color: rgba(30, 136, 229, 0.8);
-  max-height: 120px;
+  max-height: 80px;
 }
 
 #Informacion_Docente {

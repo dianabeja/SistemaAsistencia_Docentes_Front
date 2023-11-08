@@ -85,5 +85,9 @@ export class FirestoreService {
     sessionStorage.clear();
   }
 
-
+  guardar_ArregloLocal2(indice: string, valor: any[]): void {
+    const arregloLocal = JSON.parse(this.obtener_DatoLocal(indice)) || [];
+    arregloLocal.push(...valor); // Utiliza el operador spread para agregar los elementos al arreglo existente
+    this.guardar_DatoLocal(indice, JSON.stringify(arregloLocal));
+  }
 }

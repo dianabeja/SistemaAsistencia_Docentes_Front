@@ -1,37 +1,118 @@
 .Datos td{
   color: black;
   font-weight: 800;
-  font-style: italic;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 12px;
 }
 
+.Datos:hover {
+  background-color: rgb(195, 195, 195);
+
+  cursor: pointer;
+}
+
+.titulo{
+  margin: 20px;
+}
+
+.titulo-y-boton {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.table {
+  height: fit-content; /* Establece una altura máxima para la tabla */
+  width: 95%; /* Establece una altura fija para el contenedor */
+  position: absolute;
+}
 
 .excel-table th, .excel-table td {
-  padding: 1px;
   text-align: left;
   white-space: nowrap;
   text-overflow: ellipsis;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
 }
 
 .excel-table {
   width: 100%;
   table-layout: fixed;
-  border-collapse: collapse;
 }
 
-.excel-table th,
-.excel-table td {
-  padding: 1px;
-  text-align: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
+.Contenedor {
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  border-radius: 2rem;
+  background-color: rgb(255, 255, 255);
+  margin: 2px 0px 0px 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 80.5%;
+  position: relative; 
+  overflow-y: scroll;
+  width: 70%;
 }
 
-.cell-content {
-  font-weight: 500;
-  font-style: italic;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 12px;
-  color: black;
+.datoshover {
+  position: fixed;
+  background-color: transparent;
+  cursor: pointer;
+  width: 40%; /* Ajusta el ancho según tus necesidades */
+  height: 60px; /* Ajusta la altura según tus necesidades */
+
+  top: 25%;
+  left: 80%;
+}
+
+.tarjeta {
+  display: block;
+  position: absolute;
+  top: 100%; /* Coloca la tarjeta debajo del elemento .datos */
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.882); /* Color de fondo de la tarjeta */
+  width: 200px; /* Ajusta el ancho según tus necesidades */
+  padding: 10px; /* Espacio interior de la tarjeta */
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  border-radius: 2rem;
+}
+
+.tarjeta p {
+  font-size: 90%;
+  margin: 0;
+  padding: 0;
+  font-weight: 800;
+}
+
+.datoshover:hover .tarjeta {
+  display: block; /* Muestra la tarjeta al pasar el mouse sobre .datos */
+}
+.foto {
+  display: flex;
+  text-align: center;
+  padding: 10px;
+}
+  
+.follow-btn button {
+  color: rgb(255, 255, 255);
+  font: inherit;
+  background-color: rgb(10, 192, 10);
+  
+  width: 100%;
+  border: none;
+  padding: 0.5rem;
+  outline: none;
+  box-sizing: border-box;
+  margin: 10px;
+  border-radius: 1.5rem/50%;
+  transition: background-color 100ms ease-in-out, transform 200ms cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  font-size: 15px;
+}
+.follow-btn button:hover {
+  background-color: #97D4E5;
+  transform: scale(1.1);
+}
+.follow-btn button:active {
+  background-color: #97D4E5;
+  transform: scale(1);
 }

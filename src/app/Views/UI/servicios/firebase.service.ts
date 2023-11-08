@@ -230,8 +230,8 @@ export class ListasAsistenciaPostgres {
               if (asistenciaChange.type === 'added' && docId === '07-11-23') {
                 const nuevoDocumento = asistenciaChange.payload.doc.data();
                 subscription.unsubscribe();
-                nuevoDocumento.url_imagen = alumno.imagen;
-                nuevosDocumentosArray.push(nuevoDocumento);
+                //nuevoDocumento.url_imagen = alumno.imagen;
+                //nuevosDocumentosArray.push(nuevoDocumento);
 
                 resolve(nuevoDocumento);
               }

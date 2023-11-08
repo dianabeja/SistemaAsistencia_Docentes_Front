@@ -106,14 +106,14 @@ export class Listas implements OnInit {
     const db = firebase.firestore();
 
     let array: any = [
-      ["S20006732", "Yahir Jesus Jacome Cogco", "2da", "ISW"],
-     ["S20006730", "Carlos Arturo Jose Fragoso", "2da", "ISW"],
-  ["S20006728", "Erick Juarez Espinosa", "2da", "ISW"],
-  ["S20006748", "Rodrigo Mencias Gonzalez", "2da", "ISW"],
-  ["S20006761", "Itzel Mendez Martinez", "2da", "ISW"],
-  ["S19004877", "Jesus Saith Meneses Conde", "2da", "ISW"],
-  ["S20006742", "Axel Gustavo Peña Sanchez", "2da", "ISW"],
-  ["S20006770", "Adriel Eduardo Peregrina Soto", "2da", "ISW"],
+      ["S20006732", "Yahir Jesus Jacome Cogco", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006730", "Carlos Arturo Jose Fragoso", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006728", "Erick Juarez Espinosa", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006748", "Rodrigo Mencias Gonzalez", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006761", "Itzel Mendez Martinez", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S19004877", "Jesus Saith Meneses Conde", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006742", "Axel Gustavo Peña Sanchez", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
+      ["S20006770", "Adriel Eduardo Peregrina Soto", "2da", "ISW", 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e'],
     ]
 
     for (let i = 0; i < array.length; i++) {
@@ -122,6 +122,7 @@ export class Listas implements OnInit {
         Nombre: array[i][1],
         Status: array[i][2],
         Carrera: array[i][3],
+        URL:array[i][4],
       };
 
       // Crear una ruta dinámica que incluye la matrícula
@@ -141,6 +142,7 @@ export class Listas implements OnInit {
         Nombre: datos_lista.Nombre,
         Status: datos_lista.Status,
         Carrera: datos_lista.Carrera,
+        url: datos_lista.URL,
       });
 
       // Realizar una operación en la subcolección "Asistencia" para crearla si no existe

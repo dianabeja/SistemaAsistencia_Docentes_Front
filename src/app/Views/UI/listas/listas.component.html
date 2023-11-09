@@ -1,7 +1,7 @@
-<button  *ngIf="listaAsistencia  || listaAsistencia.length == 0" (click)="GuardarDatosEnFirestore()">Cargar archivo</button>
+<button  *ngIf="!listaAsistencia  || listaAsistencia.length == 0" (click)="GuardarDatosEnFirestore()">Cargar archivo</button>
 
 <div class="titulo-y-boton">
-  <h2 class="titulo">Lista de Asistencia</h2>
+  <h2 class="titulo">{{NombreMateria}}</h2>
   <div class="follow-btn">
     <button (click)="Imprimir()">Descargar Lista</button>
   </div>
@@ -22,7 +22,7 @@
   </thead>
   <tbody>
     <ng-container *ngFor="let alumno of listaAsistencia; let i = index">
-      <tr class="Datos result" (mouseenter)="mostrarTarjeta = true; alumnoSeleccionado = alumno" (mouseleave)="mostrarTarjeta = false">
+      <tr class="Datos result" (mouseenter)="mostrarTarjeta = true; alumnoSeleccionado = alumno">
         <td>{{ i + 1 }}</td>
         <td>{{ alumno.Nombre }}</td>
         <td>{{ alumno.Matricula }}</td>
@@ -37,14 +37,22 @@
 </div>
 
 <div class="datoshover" *ngIf="mostrarTarjeta">
-  <div class="foto">
-  </div>
   <div class="tarjeta">
     <p>Datos de asistencias de {{ alumnoSeleccionado.Nombre }}</p>
     <!-- Mostrar aquí la información de asistencias del alumno seleccionado -->
-    <p>Asistencias: {{ alumnoSeleccionado.cantidad_asistencias }}</p>
-    <p>Inasistencias: {{ alumnoSeleccionado.cantidad_inasistencias }}</p>
+    <p>Asistencias:</p>
+    <ul>
+      <li *ngFor="let fecha of alumnoSeleccionado.asistencias; let i = index ">
+        {{ fecha }}
+      </li>
+    </ul>
+    <p>Inasistencias:</p>
+    <ul>
+      <li *ngFor="let fecha of alumnoSeleccionado.inasistencias; let i = index">
+        {{ fecha }}
+        <button class="eliminar-button" (click)="confirmarEliminarFecha(alumnoSeleccionado.Matricula, fecha)">-</button>
+      </li>
+    </ul>
     <p>Derechos: {{alumnoSeleccionado.derecho}} </p>
-    <!-- Agrega más detalles de asistencias si es necesario -->
   </div>
 </div>

@@ -9,7 +9,7 @@
  }
 
  #ContenedorLogin {
-  height: 200rem;
+  height: 100%;
   background-attachment: fixed;
  }
 }
@@ -40,7 +40,7 @@ body {
 #ContenedorLogin {
   position: absolute;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 #Navegacion {
@@ -48,7 +48,7 @@ body {
   grid-column-start: 1;
   grid-column-end: 7;
   background-color: rgba(30, 136, 229, 0.8);
-  max-height: 80px;
+  max-height: 100px;
 }
 
 #Informacion_Docente {

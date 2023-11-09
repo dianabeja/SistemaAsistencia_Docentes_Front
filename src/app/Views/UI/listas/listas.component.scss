@@ -57,12 +57,11 @@
 .datoshover {
   position: fixed;
   background-color: transparent;
-  cursor: pointer;
-  width: 40%; /* Ajusta el ancho según tus necesidades */
-  height: 60px; /* Ajusta la altura según tus necesidades */
-
-  top: 25%;
-  left: 80%;
+  width: 90%; /* Ajusta el ancho según tus necesidades */
+  height: 90px; /* Ajusta la altura según tus necesidades */
+  top: 20%;
+  left: 78%;
+  
 }
 
 .tarjeta {
@@ -70,29 +69,22 @@
   position: absolute;
   top: 100%; /* Coloca la tarjeta debajo del elemento .datos */
   left: 0;
+  height: 350px;
   background-color: rgba(255, 255, 255, 0.882); /* Color de fondo de la tarjeta */
-  width: 200px; /* Ajusta el ancho según tus necesidades */
-  padding: 10px; /* Espacio interior de la tarjeta */
-  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+  width: 15rem; /* Ajusta el ancho según tus necesidades */
+  padding: 6px; /* Espacio interior de la tarjeta */
+  box-shadow: 0 3px 20px rgba(0,0,0,0.1);
   border-radius: 2rem;
 }
 
 .tarjeta p {
   font-size: 90%;
   margin: 0;
-  padding: 0;
   font-weight: 800;
 }
-
-.datoshover:hover .tarjeta {
-  display: block; /* Muestra la tarjeta al pasar el mouse sobre .datos */
-}
-.foto {
-  display: flex;
-  text-align: center;
-  padding: 10px;
-}
-  
+.tarjeta li {
+  list-style-type: none;
+}  
 .follow-btn button {
   color: rgb(255, 255, 255);
   font: inherit;
@@ -115,4 +107,16 @@
 .follow-btn button:active {
   background-color: #97D4E5;
   transform: scale(1);
+}
+.eliminar-button {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Hace que el botón sea circular */
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  font-size: 10px;
+  cursor: pointer;
+  margin-left: 10px; /* Agrega margen a la derecha para separar el botón de la fecha */
 }

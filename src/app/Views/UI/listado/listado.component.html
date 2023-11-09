@@ -1,3 +1,4 @@
+<h2 class="titulo">Asistencia actual | {{NombreMateria}}</h2>
 <div class="Contenedor table-container">
   <table class="table">
     <thead>
@@ -15,10 +16,10 @@
 
         <tr class="Datos" >
           <th scope="row">{{ i + 1 }}</th>
-          <td> <img [src]="alumno_recibido.url_imagen" alt="" style="width: 10%; height: 10%;"> </td>
+          <td> <img [src]="alumno_recibido.url_imagen" alt="" style="width: 28px; height: 28px;"> </td>
           <td>{{ alumno_recibido.Matricula }}</td>
           <td>{{ alumno_recibido.Nombre }}</td>
-          <td>{{ alumno_recibido.Estado }}</td>
+          <td>{{ alumno_recibido.Status }}</td>
           <td>{{ alumno_recibido.Hora }}</td>
         </tr>
       </ng-container>

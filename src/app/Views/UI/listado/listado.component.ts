@@ -25,6 +25,7 @@ export class ListadoComponent implements OnInit {
   fechaCompleta: string;
   Dia!: String;
   Hora!: String;
+  NombreMateria: String | any = '';
 
   constructor(
     private _getDatos: GetEscanerDatosUseCase,
@@ -33,7 +34,7 @@ export class ListadoComponent implements OnInit {
 
   ) {
     this.carrera = datos.getCarrera();
-   // this.nrcMateria = datos.getNrc();
+    this.nrcMateria = datos.getNrc();
     
     let fecha = new Date();
     let dia = fecha.getDate();
@@ -44,5 +45,10 @@ export class ListadoComponent implements OnInit {
 
   async ngOnInit() {
     this.listaAsistencia= await this.servicio.ListaTiempoReal();
+    this.obtenerNombreMateria();
+  }
+  async obtenerNombreMateria() {
+    let materia = await this.servicio.Obtener_Materia_EnCurso();
+this.NombreMateria=materia[0].nombre
   }
 }

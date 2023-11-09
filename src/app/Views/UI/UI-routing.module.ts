@@ -9,7 +9,7 @@ import { RegistroComponent } from './registro/registro.component';
 import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'Registro', pathMatch: 'full' },
+  { path: '', redirectTo: 'Login', pathMatch: 'full' },
   { path: 'Registro', component: RegistroComponent },
   { path: 'Login', component: LoginComponent},
   { path: 'Inicio', component: InicioComponent },

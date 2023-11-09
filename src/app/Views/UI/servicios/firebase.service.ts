@@ -111,8 +111,6 @@ export class ListasAsistenciaPostgres {
 
       return lista_asistencia_final;
     } else if (nrc == this.cache.obtener_DatoLocal('NRCListaAsistencia')) {
-      console.log('Si coincide el nrc');
-
       const lista_asistencia_final = JSON.parse(lista_asistencia_cache);
 
       return lista_asistencia_final;
@@ -120,11 +118,7 @@ export class ListasAsistenciaPostgres {
   }
 
   async consultarListaAsistencia(nrc: string, carrera: string) {
-
     let Materia = await this.Obtener_Materia_EnCurso();
-
-    console.log(Materia, 'Materia');
-
     let lista_asistencia: any =
       await this._getListaAsistenciaCasosUso.getListaAsistenciaByNrcCarrera(
         nrc,
@@ -145,33 +139,39 @@ export class ListasAsistenciaPostgres {
           )
           .get()
           .toPromise();
+        let asistenciasData: { fecha: any; data: any }[] = [];
+        let inasistenciasData: { fecha: any; data: any }[] = [];
 
-        let asistenciadata = asistencias.docs.map((asistencia: any) => {
-          return asistencia.data();
+        asistencias.docs.forEach((asistencia: any) => {
+          asistenciasData.push({
+            fecha: asistencia.id,
+            data: asistencia.data(),
+          });
         });
 
-        let inasistenciaData = inasistencias.docs.map((inasistencia: any) => {
-          return inasistencia.data();
+        inasistencias.docs.forEach((inasistencia: any) => {
+          inasistenciasData.push({
+            fecha: inasistencia.id,
+            data: inasistencia.data(),
+          });
         });
 
-        alumno.asistencias = asistenciadata;
-        alumno.inasistencias = inasistenciaData;
+        const asistenciasFechas = asistenciasData.map(
+          (asistencia) => asistencia.fecha
+        );
+        const inasistenciasFechas = inasistenciasData.map(
+          (inasistencia) => inasistencia.fecha
+        );
+        alumno.asistencias = asistenciasFechas;
+        alumno.inasistencias = inasistenciasFechas;
 
-        alumno.cantidad_asistencias = asistenciadata.length;
-        alumno.cantidad_inasistencias = inasistenciaData.length;
-
-        let derecho = this.Calcular_Derechos_Acumulados(Materia[0].horasemana,  inasistenciaData.length);
-
-        console.log(derecho, 'derecho');
-
+        alumno.cantidad_asistencias = asistenciasFechas.length;
+        alumno.cantidad_inasistencias = inasistenciasFechas.length;
+        let derecho = this.Calcular_Derechos_Acumulados(
+          Materia[0].horasemana,
+          inasistenciasFechas.length
+        );
         alumno.derecho = derecho;
-
-        //let informacion_alumno: any = await this.getAlumno(
-        //  alumno.Matricula
-        //).toPromise();
-//
-        //alumno.imagen = informacion_alumno[0].url_imagen;
-
         return alumno;
       }
     );
@@ -213,8 +213,6 @@ export class ListasAsistenciaPostgres {
       Materia[0].licenciatura
     );
 
-    console.log(Lista_Asistencia, 'Lista_Asistencia');
-
     const nuevosDocumentosArray: any = [];
 
     const promesas = Lista_Asistencia.map(async (alumno: any) => {
@@ -222,17 +220,31 @@ export class ListasAsistenciaPostgres {
         const asistenciasRef = this.firestore.collection(
           `/ISW/Materias/${Materia[0].nrc}/${alumno.Matricula}/Asistencia`
         );
+        const imagenRef = this.firestore
+          .collection(`/ISW/Materias/${Materia[0].nrc}/`)
+          .doc(`${alumno.Matricula}`);
+
+        const horaref = this.firestore.doc(
+          `/ISW/Materias/${Materia[0].nrc}/${alumno.Matricula}/Asistencia/07-11-23`);
+
         const subscription = asistenciasRef
           .snapshotChanges()
           .subscribe((asistenciasSnapshot: any) => {
-            asistenciasSnapshot.forEach((asistenciaChange: any) => {
+            asistenciasSnapshot.forEach(async (asistenciaChange: any) => {
               const docId = asistenciaChange.payload.doc.id;
               if (asistenciaChange.type === 'added' && docId === '07-11-23') {
                 const nuevoDocumento = asistenciaChange.payload.doc.data();
                 subscription.unsubscribe();
-                //nuevoDocumento.url_imagen = alumno.imagen;
-                //nuevosDocumentosArray.push(nuevoDocumento);
-
+                let info: any = await imagenRef.get().toPromise();
+                let hora: any = await horaref.get().toPromise();
+                hora=hora.data()
+                info = info.data();
+                nuevoDocumento.url_imagen = info.url;
+                nuevoDocumento.Nombre = info.Nombre;
+                nuevoDocumento.Matricula = info.Matricula;
+                nuevoDocumento.Status = info.Status;
+                nuevoDocumento.Hora=hora.hora;
+                nuevosDocumentosArray.push(nuevoDocumento);
                 resolve(nuevoDocumento);
               }
             });
@@ -244,10 +256,10 @@ export class ListasAsistenciaPostgres {
   }
 
   //Metodo para almacenar la asistencia de los alumnos en un archivo de excel o pdf
-async ExportarExcel(nrc: string) {
-     let data: any = await this.consultarListaAsistencia(nrc, 'ISW');
-     let newData: any;
-     newData = data.map((alumno: any) => {
+  async ExportarExcel(nrc: string) {
+    let data: any = await this.consultarListaAsistencia(nrc, 'ISW');
+    let newData: any;
+    newData = data.map((alumno: any) => {
       return {
         Matricula: alumno.Matricula,
         Nombre: alumno.Nombre,
@@ -257,19 +269,22 @@ async ExportarExcel(nrc: string) {
         Derecho: alumno.derecho,
       };
     });
-   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newData);    
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newData);
 
     // Establecer el ancho de las columnas
-    ws['!cols'] = [{ wch: 15 }, { wch: 35 }, { wch: 12 }, { wch: 18 }, { wch: 20 }, { wch: 12 }];
-  
-
-
+    ws['!cols'] = [
+      { wch: 15 },
+      { wch: 35 },
+      { wch: 12 },
+      { wch: 18 },
+      { wch: 20 },
+      { wch: 12 },
+    ];
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, `${nrc}.xlsx`);
   }
-  
 
   Calcular_Derechos_Acumulados(horas_materias: any, inasistencias_alumno: any) {
     let semanas_semestre = 16;

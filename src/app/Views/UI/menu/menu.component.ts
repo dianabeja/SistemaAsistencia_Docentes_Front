@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
     this.datos_Locales.Actualizar_Login(false);
     this.datos_Locales.eliminarCacheNavegador();
     this.datos_Locales.Actualizar_Formulario(false);
-    this.location.go('/Sistema/Registro');
+    this.location.go('/Sistema/Login');
   }
 
   ngOnInit(): void {}

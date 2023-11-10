@@ -20,6 +20,7 @@ export class ListasAsistenciaPostgres {
   Dia: string | any;
   Hora: string | any;
   api = environment.apiDocente + 'MateriaHorario';
+  fecha: string | any;
 
   constructor(
     private firestore: AngularFirestore,
@@ -27,7 +28,7 @@ export class ListasAsistenciaPostgres {
     private http: HttpClient,
     private _getListaAsistenciaCasosUso: GetListaAsistenciaUseCase
   ) {
-    /* let fecha = new Date();
+    let fecha = new Date();
 
     let diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
     let diaSemana = diasSemana[fecha.getDay()];   console.log('Día de la semana:', diaSemana);
@@ -39,10 +40,16 @@ export class ListasAsistenciaPostgres {
     let hora_fin = (horaInicio + 2) + ':00' ;
     horaInicio = horaInicio + ':00';
 
-    let horaCompleta = horaInicio + '-' + hora_fin; */
+    let horaCompleta = horaInicio + '-' + hora_fin; 
 
-    this.Dia = 'Lunes';
-    this.Hora = '09:00-11:00';
+    let dia = new Date().getDate();
+    let mes = new Date().getMonth() + 1;
+    let año = new Date().getFullYear();
+    let fechaFinal = dia + '-' + mes + '-' + año;
+
+    this.Dia = "Lunes";
+    this.Hora = horaCompleta;
+    this.fecha= fechaFinal
   }
 
   async Obtener_Materia_EnCurso() {
@@ -187,6 +194,10 @@ export class ListasAsistenciaPostgres {
     let header = new HttpHeaders({
       'Content-Type': 'application/json',
     });
+
+    console.log(this.Dia)
+    console.log(this.Hora)
+
     //Pasar en el body el dia y la hora
     return this.http.post<any>(
       this.api,
@@ -206,7 +217,10 @@ export class ListasAsistenciaPostgres {
   }
 
   async ListaTiempoReal() {
+    console.log('fechaa',this.fecha)
+
     const Materia: any = await this.Obtener_Materia_EnCurso();
+    console.log('fechaa', Materia)
 
     const Lista_Asistencia: any = await this.consultarListaAsistencia(
       Materia[0].nrc,
@@ -224,15 +238,16 @@ export class ListasAsistenciaPostgres {
           .collection(`/ISW/Materias/${Materia[0].nrc}/`)
           .doc(`${alumno.Matricula}`);
 
+
         const horaref = this.firestore.doc(
-          `/ISW/Materias/${Materia[0].nrc}/${alumno.Matricula}/Asistencia/07-11-23`);
+          `/ISW/Materias/${Materia[0].nrc}/${alumno.Matricula}/Asistencia/${this.fecha}`);
 
         const subscription = asistenciasRef
           .snapshotChanges()
           .subscribe((asistenciasSnapshot: any) => {
             asistenciasSnapshot.forEach(async (asistenciaChange: any) => {
               const docId = asistenciaChange.payload.doc.id;
-              if (asistenciaChange.type === 'added' && docId === '07-11-23') {
+              if (asistenciaChange.type === 'added' && docId === this.fecha) {
                 const nuevoDocumento = asistenciaChange.payload.doc.data();
                 subscription.unsubscribe();
                 let info: any = await imagenRef.get().toPromise();

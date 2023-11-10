@@ -44,26 +44,53 @@ export class Listas implements OnInit {
       //"16234",
       this.carrera
     );
-    this.obtenerNombreMateria();
   }
 
-  eliminarFecha( matricula: string, fecha: string) {
+  eliminarInasistencia( matricula: string, fecha: string) {
     // Forma la ruta completa hacia la colección de fechas que deseas eliminar
     const db = firebase.firestore();
 
     const rutaInasistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Inasistencia/${fecha}`;
     const rutaAsistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Asistencia/${fecha}`;
 
-    db.doc(rutaAsistencia).set({
-      fecha: fecha,
-    }).then(() => {
-      console.log('Fecha agregada con éxito');
-    }).catch(error => {
-      console.error('Error al agregar la fecha:', error);
-    });
+    //db.doc(rutaAsistencia).set({
+    //  fecha: fecha,
+    //}).then(() => {
+    //  console.log('Fecha agregada con éxito');
+    //}).catch(error => {
+    //  console.error('Error al agregar la fecha:', error);
+    //});
     
     // Llama a la función de eliminación de Firestore
     db.doc(rutaInasistencia).delete().then(() => {
+      console.log('Fecha eliminada con éxito');
+    }).catch(error => {
+      console.error('Error al eliminar la fecha:', error);
+    });
+  }
+
+  isNumero(cadena: string): boolean {
+    const numero = parseFloat(cadena);
+    return !isNaN(numero);
+  }
+
+  eliminarAsistencia( matricula: string, fecha: string) {
+    // Forma la ruta completa hacia la colección de fechas que deseas eliminar
+    const db = firebase.firestore();
+
+    const rutaInasistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Inasistencia/${fecha}`;
+    const rutaAsistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Asistencia/${fecha}`;
+
+    //db.doc(rutaInasistencia).set({
+    //  fecha: fecha,
+    //}).then(() => {
+    //  console.log('Fecha agregada con éxito');
+    //}).catch(error => {
+    //  console.error('Error al agregar la fecha:', error);
+    //});
+    
+    // Llama a la función de eliminación de Firestore
+    db.doc(rutaAsistencia).delete().then(() => {
       console.log('Fecha eliminada con éxito');
     }).catch(error => {
       console.error('Error al eliminar la fecha:', error);
@@ -74,10 +101,6 @@ export class Listas implements OnInit {
     this.servicio.ExportarExcel(this.nrcMateria);
   }
 
-  async obtenerNombreMateria() {
-    let materia = await this.servicio.Obtener_Materia_EnCurso();
-    this.NombreMateria = materia[0].nombre;
-  }
 
   GuardarDatosEnFirestore() {
     const db = firebase.firestore();
@@ -144,10 +167,17 @@ export class Listas implements OnInit {
     }
   }
 
-  confirmarEliminarFecha(matricula: string, fecha: string) {
-    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar esta inasistencia?');
+  confirmarEliminarFechaInasistencia(matricula: string, fecha: string) {
+    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar la Inasistencia?');
     if (confirmacion) {
-      this.eliminarFecha(matricula, fecha);
+      this.eliminarInasistencia(matricula, fecha);
+    }
+  }
+
+  confirmarEliminarFechaAsistencia(matricula: string, fecha: string) {
+    const confirmacion = window.confirm('¿Estás seguro de que quieres eliminar la Asistencia?');
+    if (confirmacion) {
+      this.eliminarAsistencia(matricula, fecha);
     }
   }
 

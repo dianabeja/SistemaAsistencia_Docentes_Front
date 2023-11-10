@@ -1,7 +1,7 @@
-<button  *ngIf="!listaAsistencia  || listaAsistencia.length == 0" (click)="GuardarDatosEnFirestore()">Cargar archivo</button>
+<!--<button  *ngIf="!listaAsistencia  || listaAsistencia.length == 0" (click)="GuardarDatosEnFirestore()">Cargar archivo</button>-->
 
 <div class="titulo-y-boton">
-  <h2 class="titulo">{{NombreMateria}}</h2>
+  <h2 class="titulo">Lista de asistencia |{{nrcMateria}}</h2>
   <div class="follow-btn">
     <button (click)="Imprimir()">Descargar Lista</button>
   </div>
@@ -28,8 +28,8 @@
         <td>{{ alumno.Matricula }}</td>
         <td>{{ alumno.Carrera }}</td>
         <td>{{ alumno.Status }}</td>
-        <td>{{ alumno.cantidad_asistencias}}</td>
-        <td>{{ alumno.cantidad_inasistencias}}</td>
+        <td>{{ alumno.cantidad_asistencias-1}}</td>
+        <td>{{ alumno.cantidad_inasistencias-1}}</td>
       </tr>
     </ng-container>
   </tbody>
@@ -43,14 +43,20 @@
     <p>Asistencias:</p>
     <ul>
       <li *ngFor="let fecha of alumnoSeleccionado.asistencias; let i = index ">
-        {{ fecha }}
+        <ng-container *ngIf="isNumero(fecha)">
+          {{ fecha }}
+          <button class="eliminar-button" (click)="confirmarEliminarFechaAsistencia(alumnoSeleccionado.Matricula, fecha)">-</button>
+        </ng-container>
       </li>
+
     </ul>
     <p>Inasistencias:</p>
     <ul>
       <li *ngFor="let fecha of alumnoSeleccionado.inasistencias; let i = index">
-        {{ fecha }}
-        <button class="eliminar-button" (click)="confirmarEliminarFecha(alumnoSeleccionado.Matricula, fecha)">-</button>
+        <ng-container *ngIf="isNumero(fecha)">
+          {{ fecha }}
+          <button class="eliminar-button" (click)="confirmarEliminarFechaInasistencia(alumnoSeleccionado.Matricula, fecha)">-</button>
+        </ng-container>
       </li>
     </ul>
     <p>Derechos: {{alumnoSeleccionado.derecho}} </p>

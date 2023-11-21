@@ -48,7 +48,7 @@ export class ListasAsistenciaPostgres {
     let fechaFinal = dia + '-' + mes + '-' + año;
 
     this.Dia = "Lunes";
-    this.Hora = horaCompleta;
+    this.Hora = '09:00-11:00';
     this.fecha= fechaFinal
   }
 
@@ -220,12 +220,13 @@ export class ListasAsistenciaPostgres {
     console.log('fechaa',this.fecha)
 
     const Materia: any = await this.Obtener_Materia_EnCurso();
-    console.log('fechaa', Materia)
 
     const Lista_Asistencia: any = await this.consultarListaAsistencia(
       Materia[0].nrc,
       Materia[0].licenciatura
     );
+    console.log('fechaa', Lista_Asistencia)
+
 
     const nuevosDocumentosArray: any = [];
 

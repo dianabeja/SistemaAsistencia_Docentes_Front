@@ -53,13 +53,13 @@ export class Listas implements OnInit {
     const rutaInasistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Inasistencia/${fecha}`;
     const rutaAsistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Asistencia/${fecha}`;
 
-    //db.doc(rutaAsistencia).set({
-    //  fecha: fecha,
-    //}).then(() => {
-    //  console.log('Fecha agregada con éxito');
-    //}).catch(error => {
-    //  console.error('Error al agregar la fecha:', error);
-    //});
+    db.doc(rutaAsistencia).set({
+      fecha: fecha,
+    }).then(() => {
+      console.log('Fecha agregada con éxito');
+    }).catch(error => {
+      console.error('Error al agregar la fecha:', error);
+    });
     
     // Llama a la función de eliminación de Firestore
     db.doc(rutaInasistencia).delete().then(() => {
@@ -81,13 +81,13 @@ export class Listas implements OnInit {
     const rutaInasistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Inasistencia/${fecha}`;
     const rutaAsistencia = `/ISW/Materias/${this.nrcMateria}/${matricula}/Asistencia/${fecha}`;
 
-    //db.doc(rutaInasistencia).set({
-    //  fecha: fecha,
-    //}).then(() => {
-    //  console.log('Fecha agregada con éxito');
-    //}).catch(error => {
-    //  console.error('Error al agregar la fecha:', error);
-    //});
+    db.doc(rutaInasistencia).set({
+      fecha: fecha,
+    }).then(() => {
+      console.log('Fecha agregada con éxito');
+    }).catch(error => {
+      console.error('Error al agregar la fecha:', error);
+    });
     
     // Llama a la función de eliminación de Firestore
     db.doc(rutaAsistencia).delete().then(() => {
@@ -107,11 +107,7 @@ export class Listas implements OnInit {
 
     let array: any = [
       [
-        'S20006732',
-        'Yahir Jesus Jacome Cogco',
-        '2da',
-        'ISW',
-        'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e',
+        'S20006732', 'Yahir Jesus Jacome Cogco', '2da','ISW', 'https://firebasestorage.googleapis.com/v0/b/heartmodel-caedd.appspot.com/o/foto-perfil-generica.jpg?alt=media&token=4b535835-114a-4db6-b2dc-dba46cb3b96e',
       ],
     ];
 

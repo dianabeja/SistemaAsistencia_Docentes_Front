@@ -116,6 +116,4 @@ export class Listas implements OnInit {
         });
     }
   }
-
-
 }

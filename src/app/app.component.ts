@@ -9,6 +9,7 @@ import { FirestoreService } from './Views/UI/servicios/FirestoreListas.service';
 })
 export class AppComponent {
   
+  title = 'Sistema';
   //variable que almacenará si el usuario ha iniciado sesión o no
   loggedIn: boolean = false;
   //variable que almacenará que formulario mostrar

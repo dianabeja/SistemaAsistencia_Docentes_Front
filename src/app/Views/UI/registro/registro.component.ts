@@ -35,7 +35,7 @@ export class RegistroComponent implements OnInit {
   Mensaje_Cuenta: any;
 
   //location permite navegar entre las diferentes pestañas del sistema o manipular la pestaña actual
-  //storage de AngularFireStorage permite acceder al storage de nuestro poryecto de firebase
+  //storage de AngularFireStorage permite acceder al storage de nuestro proyecto de firebase
   //PostCuentasUseCase es parte de nuestra arquitectura hexagonal, la cual permitirá comunicarnos con la api y realizar nuestras peticiones http(post, get, put, delete)
   constructor(
     private datosLocales: FirestoreService,
@@ -73,6 +73,7 @@ export class RegistroComponent implements OnInit {
           this.mostrarBotonAceptar = true;
         }
       );
+      //Aquí se mostrará un mensaje indicando que la contraseña no es correcta o no coincidee, esto durante 4000 ms
     } else {
       this.Mensaje_Contrasena = true;
       setTimeout(() => {
@@ -81,6 +82,7 @@ export class RegistroComponent implements OnInit {
     }
   }
 
+  //La función permite ocultar el mensaje de que la cuenta ha sido creada con éxito
   ocultarMensajeCuenta(): void {
     this.Mostrar_Mensaje_Cuenta = false;
     this.mostrarBotonAceptar = false;
@@ -88,12 +90,18 @@ export class RegistroComponent implements OnInit {
 
   //Función para guardar la imagen del formulario en el storage de nuestro proyecto de firebase
   async SubirImagenFirestore() {
+    //si la variable file no esta vacia(se almacenó una imagen en ella, entonces)
     if (this.file) {
+      //la ruta o el  nombre con que se guardará en firebase será con el nombre de la imagen
       const filePath = `images/${this.file.name}`;
+      //la referencia para firebase será la variable filePath
       const fileRef = this.storage.ref(filePath);
       try {
+        //Subir la imagen guardada a firebase pasando como parametro la ruta o el path y el archivo a guardar
         await this.storage.upload(filePath, this.file);
+        //Guardar en una variable el url de la imagen a través de la variable fileRef
         const downloadUrl = await fileRef.getDownloadURL().toPromise();
+        //almacenar en  la variable que irá en al bd el url de la imagen obtenido
         this.imageURL = downloadUrl;
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -101,7 +109,12 @@ export class RegistroComponent implements OnInit {
     }
   }
 
+
+  //metodos para guardar los datos obtenidos o ingresados a traves del formulario de registro
+
+
   actualizarNombreUsuario(event: Event): void {
+    //guardar en la variable lo que se registre o imgrese en el imput correspondiente del formulario
     this.nombre_usuario = (event.target as HTMLInputElement).value;
   }
 
@@ -134,18 +147,27 @@ export class RegistroComponent implements OnInit {
     this.MostrarImagen(this.file);
   }
 
+//método para mostrat la imagen, recibiendo como parametro un valor de tipo file
   MostrarImagen(file: File) {
+    //Hacer una instancia de tipo FIleReader para poder mostrar o visualizar un archivo de tipo file
     const reader = new FileReader();
+    //Utilizar el método onload para acceder a las características de la imagen 
     reader.onload = (e: any) => {
       this.imageURL = e.target.result;
     };
+    //mostart imagen pasada como parámetro
     reader.readAsDataURL(file);
   }
 
+  //Metodo para intercambiar formulario visible a la pantalla
   IniciarSesion() {
+    //Guardar en caché qué formulario se queire visualizar(Login)
     this.datosLocales.Actualizar_Formulario('login');
     this.datosLocales.guardar_DatoLocal('formulario', 'login');
     this.location.go('/Sistema/Login');
+    //Recargar página de destino+
+
+    
     location.reload();
   }
 

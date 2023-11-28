@@ -27,7 +27,12 @@ export class DocenteComponent implements OnInit {
     this.response$ = await this._getDocentesCasosUso.getDocenteByID(this.token);
     this.response$.subscribe((data: any) => {
       this.datos = data;
-      console.log(data)
+
+      let validar = this.datos_Locales.obtener_DatoLocal("docenteInfo")
+
+      if (!validar) {
+        this.datos_Locales.guardar_DatoLocal('docenteInfo', data.no_personal);
+      }
     });
   }
 
